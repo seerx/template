@@ -1,17 +1,21 @@
-import { login, logout, getInfo } from '@/api/user'
+import { logout } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
+import { login, getInfo } from '@/svc/account'
+// import store from '@/store'
 
 const state = {
   token: getToken(),
   name: '',
   avatar: '',
+  key: '',
   introduction: '',
   roles: []
 }
 
 const mutations = {
   SET_TOKEN: (state, token) => {
+    console.log('set', token)
     state.token = token
   },
   SET_INTRODUCTION: (state, introduction) => {
@@ -19,6 +23,9 @@ const mutations = {
   },
   SET_NAME: (state, name) => {
     state.name = name
+  },
+  SET_KEY: (state, key) => {
+    state.key = key
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
@@ -33,11 +40,24 @@ const actions = {
   login({ commit }, userInfo) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
-        const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
-        resolve()
+      login({ user: username.trim(), password: password }).then((response) => {
+        // const { data } = response
+        // const res = data['account.Login'][0]
+
+        const res = response
+        if (res['error']) {
+          // 登录失败
+          reject(res['error'])
+        } else {
+          // 登录成功
+          const { key, token } = res.data
+          commit('SET_KEY', key)
+          commit('SET_TOKEN', token)
+          // console.log(key)
+          setToken(token)
+          // console.log('store.getters.token set', store.getters.token)
+          resolve()
+        }
       }).catch(error => {
         reject(error)
       })

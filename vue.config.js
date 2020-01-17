@@ -26,7 +26,8 @@ module.exports = {
    */
   publicPath: '/',
   outputDir: 'dist',
-  assetsDir: 'static',
+  // assetsDir: 'static',
+  assetsDir: '',
   lintOnSave: process.env.NODE_ENV === 'development',
   productionSourceMap: false,
   devServer: {
@@ -37,18 +38,40 @@ module.exports = {
       errors: true
     },
     proxy: {
-      // change xxx-api/login => mock/login
-      // detail: https://cli.vuejs.org/config/#devserver-proxy
-      [process.env.VUE_APP_BASE_API]: {
-        target: `http://127.0.0.1:${port}/mock`,
-        changeOrigin: true,
-        pathRewrite: {
-          ['^' + process.env.VUE_APP_BASE_API]: ''
-        }
+      ['api']: {
+        target: 'http://192.168.0.80:6060',
+        changeOrigin: true
+        // pathRewrite: {
+        //   ['^api']: 'api'
+        // }
       }
-    },
-    after: require('./mock/mock-server.js')
+    }
+
+    // proxy: 'http://localhost:6060/'
   },
+  // devServer: {
+  //   port: port,
+  //   open: true,
+  //   overlay: {
+  //     warnings: false,
+  //     errors: true
+  //   },
+  //   proxy: {
+  //     // ['/api']: {
+  //     //   target: 'http://127.0.0.1:6060/'
+  //     // }
+  //     // change xxx-api/login => mock/login
+  //     // detail: https://cli.vuejs.org/config/#devserver-proxy
+  //     // [process.env.VUE_APP_BASE_API]: {
+  //     [process.env.VUE_APP_BASE_API]: {
+  //       target: `http://127.0.0.1:6060/api`,
+  //       changeOrigin: true,
+  //       pathRewrite: {
+  //         ['^' + process.env.VUE_APP_BASE_API]: ''
+  //       }
+  //     }
+  //   }
+  // },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that
     // it can be accessed in index.html to inject the correct title.
