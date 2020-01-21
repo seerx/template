@@ -10,6 +10,12 @@ export const login = ({ user, password }) => {
   }])
 }
 
+export const logout = () => {
+  return http.post([{
+    'service': 'account.Logout'
+  }])
+}
+
 export const getInfo = (token) => {
   return http.post([{
     'service': 'account.Info',

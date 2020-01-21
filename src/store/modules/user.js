@@ -1,16 +1,18 @@
-import { logout } from '@/api/user'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+// import {  } from '@/api/user'
+import { getToken, setToken, getTokenKey, setTokenKey, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
-import { login, getInfo } from '@/svc/account'
+import { login, logout, getInfo } from '@/svc/account'
 // import store from '@/store'
 
 const state = {
   token: getToken(),
   name: '',
   avatar: '',
-  key: '',
+  key: getTokenKey(),
   introduction: '',
-  roles: []
+  roles: [],
+  errDeny: '',
+  errGotoLogin: ''
 }
 
 const mutations = {
@@ -32,6 +34,12 @@ const mutations = {
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
+  },
+  SET_DENY_ERR: (state, err) => {
+    state.errDeny = err
+  },
+  SET_GOTO_LOGIN_ERR: (state, err) => {
+    state.errGotoLogin = err
   }
 }
 
@@ -50,10 +58,15 @@ const actions = {
           reject(res['error'])
         } else {
           // 登录成功
-          const { key, token } = res.data
+          const { key, token, errors } = res.data
           commit('SET_KEY', key)
           commit('SET_TOKEN', token)
+
+          console.log(errors)
+          commit('SET_GOTO_LOGIN_ERR', errors['gotoLogin'])
+          commit('SET_DENY_ERR', errors['deny'])
           // console.log(key)
+          setTokenKey(key)
           setToken(token)
           // console.log('store.getters.token set', store.getters.token)
           resolve()

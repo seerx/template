@@ -1,7 +1,7 @@
 import axios from 'axios'
 import store from '@/store'
 import { MessageBox, Message } from 'element-ui'
-// import { getToken } from '@/utils/auth'
+import { getToken, getTokenKey } from '@/utils/auth'
 
 class HttpRequest {
   api = '/api'
@@ -44,8 +44,11 @@ class HttpRequest {
   })
   interceptors() {
     this.instance.interceptors.request.use(cfg => {
+      // console.log('store.getters.token', store.getters.token)
+      // console.log('getTokenKey()', getTokenKey())
+      // console.log('getToken()', getToken())
       if (store.getters.token) {
-        cfg.headers['X-Token'] = store.getters.token
+        cfg.headers[getTokenKey()] = getToken()
       }
       return cfg
     }, err => {
@@ -79,17 +82,19 @@ class HttpRequest {
             const item = innerData[k]
             toLogin = false
             for (var n = 0; n < item.length; n++) {
-              if (this.needLogin(item[n]['error'])) {
-                // 需要登录
-                toLogin = true
-                break
-              } else {
-                // 其他错误
-                Message({
-                  message: item[n]['error'],
-                  type: 'error',
-                  duration: 5 * 1000
-                })
+              if (item[n]['error']) {
+                if (this.needLogin(item[n]['error'])) {
+                  // 需要登录
+                  toLogin = true
+                  break
+                } else {
+                  // 其他错误
+                  Message({
+                    message: item[n]['error'],
+                    type: 'error',
+                    duration: 5 * 1000
+                  })
+                }
               }
             }
             if (toLogin) {
@@ -116,7 +121,8 @@ class HttpRequest {
     )
   }
   needLogin(err) {
-    return err === 'need-login'
+    console.log('store.getters.errGotoLogin', store.getters.errGotoLogin)
+    return err === store.getters.errGotoLogin
   }
   tryToLogin() {
     MessageBox.confirm('您的登录信息已经失效, 点击取消按钮定留在当前页, 点击重新登录按钮转到登录页', '确认', {

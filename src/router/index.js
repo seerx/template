@@ -55,11 +55,11 @@ export const constantRoutes = [
     component: () => import('@/views/login/index'),
     hidden: true
   },
-  {
-    path: '/auth-redirect',
-    component: () => import('@/views/login/auth-redirect'),
-    hidden: true
-  },
+  // {
+  //   path: '/auth-redirect',
+  //   component: () => import('@/views/login/auth-redirect'),
+  //   hidden: true
+  // },
   {
     path: '/404',
     component: () => import('@/views/error-page/404'),
@@ -79,7 +79,7 @@ export const constantRoutes = [
         path: 'dashboard',
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
-        meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
+        meta: { title: '首页', icon: 'dashboard', affix: true }
       }
     ]
   },
@@ -91,7 +91,20 @@ export const constantRoutes = [
         path: 'index',
         component: () => import('@/views/documentation/index'),
         name: 'Documentation',
-        meta: { title: 'Documentation', icon: 'documentation', affix: true }
+        meta: { title: '文档', icon: 'documentation', affix: false }
+      }
+    ]
+  },
+  {
+    path: '/api',
+    component: Layout,
+    redirect: '/apidoc/index',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/apidoc/index'),
+        name: 'API',
+        meta: { title: 'Api 文档', icon: 'api', noCache: true }
       }
     ]
   },

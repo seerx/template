@@ -68,7 +68,8 @@ const elementIcons = [
   'upload',
   'upload2',
   'download',
-  'loading'
+  'loading',
+  'cpu'
 ]
 
 export default elementIcons
