@@ -134,6 +134,20 @@ export const constantRoutes = [
         meta: { title: 'Profile', icon: 'user', noCache: true }
       }
     ]
+  },
+  {
+    path: '/selfinfo',
+    component: Layout,
+    redirect: '/selfinfo/index',
+    hidden: true,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/self-info/index'),
+        name: 'SelfInfo',
+        meta: { title: '个人信息', icon: 'user', noCache: true }
+      }
+    ]
   }
 ]
 

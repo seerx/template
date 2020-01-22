@@ -25,3 +25,11 @@ export const getInfo = (token) => {
   }])
 }
 
+export const uploadAvatar = (imageFile) => {
+  return http.upload([{
+    'service': 'account.UploadAvatar'
+  }], {
+    avatar: imageFile
+  })
+}
+

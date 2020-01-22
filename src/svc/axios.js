@@ -1,7 +1,7 @@
 import axios from 'axios'
 import store from '@/store'
 import { MessageBox, Message } from 'element-ui'
-import { getToken, getTokenKey } from '@/utils/auth'
+// import { getToken, getTokenKey } from '@/utils/auth'
 
 class HttpRequest {
   api = '/api'
@@ -21,6 +21,31 @@ class HttpRequest {
       })
     })
   }
+  // 上传文件
+  // files = {
+  //    file1: file // Blob
+  //    file2: file // Blob
+  //    ... ...
+  // }
+  upload = (param, files) => {
+    const runjsonField = 'rjbody'
+    const formData = new FormData()
+    formData.append(runjsonField, param)
+    for (var field in files) {
+      formData.append(field, files[field])
+    }
+    const opt = {
+      method: 'post',
+      url: this.api,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        '--run-json-field--': runjsonField
+      },
+      formData
+    }
+    return this.request(opt)
+  }
+  // http get
   get = (data) => {
     const opt = {
       method: 'get',
@@ -48,7 +73,8 @@ class HttpRequest {
       // console.log('getTokenKey()', getTokenKey())
       // console.log('getToken()', getToken())
       if (store.getters.token) {
-        cfg.headers[getTokenKey()] = getToken()
+        cfg.headers[store.getters.key] = store.getters.token
+        // cfg.headers[getTokenKey()] = getToken()
       }
       return cfg
     }, err => {
@@ -121,7 +147,7 @@ class HttpRequest {
     )
   }
   needLogin(err) {
-    console.log('store.getters.errGotoLogin', store.getters.errGotoLogin)
+    // console.log('store.getters.errGotoLogin', store.getters.errGotoLogin)
     return err === store.getters.errGotoLogin
   }
   tryToLogin() {

@@ -1,5 +1,5 @@
 // import {  } from '@/api/user'
-import { getToken, setToken, getTokenKey, setTokenKey, removeToken } from '@/utils/auth'
+import { getToken, setToken, getTokenKey, setTokenKey, removeToken, setErrorTable } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 import { login, logout, getInfo } from '@/svc/account'
 // import store from '@/store'
@@ -17,7 +17,6 @@ const state = {
 
 const mutations = {
   SET_TOKEN: (state, token) => {
-    console.log('set', token)
     state.token = token
   },
   SET_INTRODUCTION: (state, introduction) => {
@@ -62,12 +61,13 @@ const actions = {
           commit('SET_KEY', key)
           commit('SET_TOKEN', token)
 
-          console.log(errors)
+          // console.log(errors)
           commit('SET_GOTO_LOGIN_ERR', errors['gotoLogin'])
           commit('SET_DENY_ERR', errors['deny'])
           // console.log(key)
           setTokenKey(key)
           setToken(token)
+          setErrorTable(errors)
           // console.log('store.getters.token set', store.getters.token)
           resolve()
         }
