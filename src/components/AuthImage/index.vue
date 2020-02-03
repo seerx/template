@@ -8,28 +8,32 @@ import { image } from '@/svc/image'
 export default {
   name: 'AuthImage',
   props: {
-    service: {
-      type: String
-    },
-    param: {
+    imageArg: {
       type: Object
     }
   },
   data() {
     return {
-      imageUrl: null
+      imageUrl: null,
+      service_changed: false,
+      param_changed: false
     }
   },
-  mounted() {
-    this.$nextTick(() => {
-      image(this.service, this.param).then(blob => {
+  watch: {
+    imageArg: {
+      handler: 'load',
+      immediate: true
+    }
+  },
+  methods: {
+    load() {
+      const { service, arg } = this.imageArg
+      image(service, arg).then(blob => {
         this.imageUrl = URL.createObjectURL(blob)
       }).catch(err => {
         console.log(err)
       })
-    })
-    // console.log('service', this.service)
-    // console.log('param', this.param)
+    }
   }
 }
 </script>

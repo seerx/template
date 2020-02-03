@@ -21,8 +21,8 @@
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
           <auth-image
-            service="account.Avatar"
-            :src="avatar+'?imageView2/1/w/80/h/80'"
+            ref="avatar"
+            :image-arg="avatarArg"
             class="user-avatar"
           />
           <i class="el-icon-caret-bottom" />
@@ -78,6 +78,13 @@ export default {
       'avatar',
       'device'
     ])
+  },
+  data() {
+    return {
+      avatarArg: {
+        service: 'account.Avatar'
+      }
+    }
   },
   methods: {
     toggleSideBar() {

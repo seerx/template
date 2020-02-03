@@ -97,7 +97,7 @@ class HttpRequest {
   //   timeout: 5000 // request timeout
   // })
   interceptors(instance) {
-    console.log('instance', instance)
+    // console.log('instance', instance)
     instance.interceptors.request.use(cfg => {
       // console.log('store.getters.token', store.getters.token)
       // console.log('getTokenKey()', getTokenKey())
