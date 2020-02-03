@@ -1,5 +1,5 @@
 import HttpRequest from '@/svc/axios'
 
 const http = new HttpRequest()
-http.interceptors()
+// http.interceptors()
 export default http

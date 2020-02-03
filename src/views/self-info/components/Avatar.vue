@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import { uploadAvatar } from '@/svc/account'
 
 export default {
   name: 'Avatar',
@@ -29,15 +30,14 @@ export default {
     }
   },
   methods: {
-    test(now, ...aaa) {
-      console.log(aaa)
-      aaa.forEach(item => {
-        console.log(item)
-      })
-    },
     doUpload(upload) {
-      this.test(0, { aaa: '123' }, { aaa: '456' }, { aaa: '789' })
-      this.imageUrl = URL.createObjectURL(upload.file)
+      const fileObject = upload.file
+      uploadAvatar(fileObject).then(res => {
+        console.log(res)
+        this.imageUrl = URL.createObjectURL(fileObject)
+      }).catch(err => {
+        console.log(err)
+      })
       // console.log('uoload', file)
       // for (var n = 0; n < 100; n ++) {
       //   // sleep(1)

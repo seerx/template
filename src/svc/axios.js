@@ -6,9 +6,13 @@ import { MessageBox, Message } from 'element-ui'
 class HttpRequest {
   api = '/api'
   request = (opt) => {
-    const instance = this.instance(opt)
+    const instance = this.newInstance()(opt)
     return new Promise((resolve, reject) => {
       instance.then(res => {
+        if (!(res instanceof Object)) {
+          reject(res)
+          return
+        }
         const { data } = res
         if (opt['data'].length === 1) {
           const resp = data[opt['data'][0]['service']][0]
@@ -16,7 +20,8 @@ class HttpRequest {
         } else {
           resolve(data)
         }
-      }, err => {
+      }).catch(err => {
+        console.log('err', err)
         reject(err)
       })
     })
@@ -27,23 +32,38 @@ class HttpRequest {
   //    file2: file // Blob
   //    ... ...
   // }
+  download = (param) => {
+    const instance = this.newInstance()
+    return instance.post(this.api, param, {
+      responseType: 'blob'
+    })
+  }
   upload = (param, files) => {
     const runjsonField = 'rjbody'
     const formData = new FormData()
-    formData.append(runjsonField, param)
-    for (var field in files) {
+    for (const field in files) {
       formData.append(field, files[field])
     }
-    const opt = {
-      method: 'post',
-      url: this.api,
+    formData.append(runjsonField, JSON.stringify(param))
+
+    const instance = this.newInstance()
+    return instance.post(this.api, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
         '--run-json-field--': runjsonField
-      },
-      formData
-    }
-    return this.request(opt)
+      }
+    })
+    // const opt = {
+    //   method: 'post',
+    //   url: this.api,
+    //   headers: {
+    //     'Content-Type': 'multipart/form-data',
+    //     '--run-json-field--': runjsonField
+    //   },
+    //   formData
+    // }
+    // return this.request
+    // return this.request(opt)
   }
   // http get
   get = (data) => {
@@ -62,13 +82,23 @@ class HttpRequest {
     }
     return this.request(opt)
   }
-  instance = axios.create({
-    // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
-    // withCredentials: true, // send cookies when cross-domain requests
-    timeout: 5000 // request timeout
-  })
-  interceptors() {
-    this.instance.interceptors.request.use(cfg => {
+  newInstance() {
+    const instance = axios.create({
+      // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+      // withCredentials: true, // send cookies when cross-domain requests
+      timeout: 5000 // request timeout
+    })
+    this.interceptors(instance)
+    return instance
+  }
+  // instance = axios.create({
+  //   // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+  //   // withCredentials: true, // send cookies when cross-domain requests
+  //   timeout: 5000 // request timeout
+  // })
+  interceptors(instance) {
+    console.log('instance', instance)
+    instance.interceptors.request.use(cfg => {
       // console.log('store.getters.token', store.getters.token)
       // console.log('getTokenKey()', getTokenKey())
       // console.log('getToken()', getToken())
@@ -78,12 +108,14 @@ class HttpRequest {
       }
       return cfg
     }, err => {
-      console.log(err) // for debug
+      // console.log(err) // for debug
       return Promise.reject(err)
     })
-    this.instance.interceptors.response.use(
+    instance.interceptors.response.use(
       res => {
         // 返回信息
+        // console.log('typeof res', typeof res)
+        // console.log('res', res)
         // 从返回信息中，获取 data
         const { data } = res
         if (data['error']) {
@@ -93,21 +125,25 @@ class HttpRequest {
             // 需要登录 to re-login
             this.tryToLogin()
           } else {
+            // console.log(data)
+            // console.log(typeof data)
             // 其他错误信息，给出提示
             Message({
               message: data['error'] === '' ? '未知错误' : data['error'],
               type: 'error',
               duration: 5 * 1000
             })
-            Promise.reject(data)
+            // console.log('reject int', data)
+            // Promise.reject(data).then(r => {})
+            // console.log('done')
           }
         } else {
           const innerData = data['data']
           let toLogin = false
-          for (var k in innerData) {
+          for (const k in innerData) {
             const item = innerData[k]
             toLogin = false
-            for (var n = 0; n < item.length; n++) {
+            for (let n = 0; n < item.length; n++) {
               if (item[n]['error']) {
                 if (this.needLogin(item[n]['error'])) {
                   // 需要登录
@@ -131,8 +167,9 @@ class HttpRequest {
             this.tryToLogin()
           }
           // 没有错误，直接返回 data
-          return data
+          // return data
         }
+        return data
       },
       err => {
         // 错误信息

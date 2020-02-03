@@ -51,9 +51,9 @@ export default {
       save: 'Save'
     },
     error: {
-      onlyImg: 'Image only',
-      outOfSize: 'Image exceeds size limit: ',
-      lowestPx: 'Image\'s size is too low. Expected at least: '
+      onlyImg: 'AuthImage only',
+      outOfSize: 'AuthImage exceeds size limit: ',
+      lowestPx: 'AuthImage\'s size is too low. Expected at least: '
     }
   },
   ro: {
@@ -129,7 +129,7 @@ export default {
       save: 'Enregistrer'
     },
     error: {
-      onlyImg: 'Image uniquement',
+      onlyImg: 'AuthImage uniquement',
       outOfSize: 'L\'image sélectionnée dépasse la taille maximum: ',
       lowestPx: 'L\'image sélectionnée est trop petite. Dimensions attendues: '
     }

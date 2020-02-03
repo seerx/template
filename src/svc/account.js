@@ -2,7 +2,7 @@ import http from '@/svc/http'
 
 export const login = ({ user, password }) => {
   return http.post([{
-    'service': 'account.Login',
+    'service': 'login.Login',
     'args': {
       user,
       password
