@@ -5,10 +5,14 @@
     </div>
     <div class="user-profile">
       <div class="box-center">
-        <pan-thumb :image="user.avatar" :height="'100px'" :width="'100px'" :hoverable="false">
-          <div>Hello</div>
-          {{ user.role }}
-        </pan-thumb>
+        <el-avatar
+          :size="120"
+        >
+          <auth-image
+            ref="avatar"
+            :image-arg="avatarArg"
+          />
+        </el-avatar>
       </div>
       <div class="box-center">
         <div class="user-name text-center">{{ user.name }}</div>
@@ -20,8 +24,9 @@
         <div class="user-bio-section-header"><svg-icon icon-class="education" /><span>管理</span></div>
         <div class="user-bio-section-body">
           <el-menu class="el-menu-vertical-demo">
-            <el-menu-item index="nickname">昵称</el-menu-item>
-            <el-menu-item index="nickname">修改密码</el-menu-item>
+            <el-menu-item index="nickname" @click="$emit('onPage', 'info')">修改信息</el-menu-item>
+            <el-menu-item index="nickname" @click="$emit('onPage', 'avatar')">上传头像</el-menu-item>
+            <el-menu-item index="nickname" @click="$emit('onPage', 'password')">修改密码</el-menu-item>
           </el-menu>
         </div>
       </div>
@@ -30,11 +35,11 @@
 </template>
 
 <script>
-import PanThumb from '@/components/PanThumb'
+import AuthImage from '@/components/AuthImage'
 
 export default {
   name: 'Info',
-  components: { PanThumb },
+  components: { AuthImage },
   props: {
     user: {
       type: Object,
@@ -46,6 +51,18 @@ export default {
           roles: ''
         }
       }
+    }
+  },
+  data() {
+    return {
+      avatarArg: {
+        service: 'account.Avatar'
+      }
+    }
+  },
+  methods: {
+    updateAvatar() {
+      this.$refs.avatar.load()
     }
   }
 }

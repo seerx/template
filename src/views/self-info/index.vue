@@ -3,10 +3,19 @@
     <div if="user">
       <el-row :gutter="20">
         <el-col :span="6" :xs="24">
-          <info :user="user" />
+          <info ref="info" :user="user" @onPage="setPage" />
         </el-col>
         <el-col :span="18" :xs="24">
-          <avatar />
+          <avatar
+            v-if="page==='avatar'"
+            @onAvatarUpdate="updateAvatar"
+          />
+          <modify-info
+            v-if="page==='info'"
+          />
+          <modify-password
+            v-if="page==='password'"
+          />
         </el-col>
       </el-row>
     </div>
@@ -17,13 +26,16 @@
 import { mapGetters } from 'vuex'
 import Info from './components/Info'
 import Avatar from './components/Avatar'
+import ModifyInfo from './components/ModifyInfo'
+import ModifyPassword from './components/ModifyPassword'
 
 export default {
   name: 'SelfInfo',
-  components: { Info, Avatar },
+  components: { Info, Avatar, ModifyInfo, ModifyPassword },
   data() {
     return {
-      user: {}
+      user: {},
+      page: 'info'
     }
   },
   computed: {
@@ -37,6 +49,12 @@ export default {
     this.getUser()
   },
   methods: {
+    updateAvatar() {
+      this.$refs.info.updateAvatar()
+    },
+    setPage(page) {
+      this.page = page
+    },
     getUser() {
       this.user = {
         name: this.name,

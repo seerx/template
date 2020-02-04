@@ -33,24 +33,23 @@ export default {
     doUpload(upload) {
       const fileObject = upload.file
       uploadAvatar(fileObject).then(res => {
-        console.log(res)
         this.imageUrl = URL.createObjectURL(fileObject)
+        this.$message({
+          type: 'success',
+          message: '头像上传成功'
+        })
+        this.$emit('onAvatarUpdate', this.imageUrl)
       }).catch(err => {
         console.log(err)
       })
-      // console.log('uoload', file)
-      // for (var n = 0; n < 100; n ++) {
-      //   // sleep(1)
-      //   // upload.onProgress()
-      // }
     },
     handleAvatarSuccess(res, file) {
-      console.log('handleAvatarSuccess')
-      this.imageUrl = URL.createObjectURL(file.raw)
+      // console.log('handleAvatarSuccess')
+      // this.imageUrl = URL.createObjectURL(file.raw)
     },
     handlePreview(file) {
-      console.log('preview')
-      this.imageUrl = URL.createObjectURL(file.raw)
+      // console.log('preview')
+      // this.imageUrl = URL.createObjectURL(file.raw)
     },
     beforeAvatarUpload(file) {
       console.log('before')

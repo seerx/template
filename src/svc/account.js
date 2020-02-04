@@ -33,3 +33,24 @@ export const uploadAvatar = (imageFile) => {
   })
 }
 
+export const modifyInfo = ({ id, name }) => {
+  return http.post([{
+    'service': 'account.ModifyInfo',
+    'args': {
+      id,
+      name
+    }
+  }])
+}
+
+export const modifyPassword = ({ id, oldPwd, newPwd }) => {
+  return http.post([{
+    'service': 'account.ModifyPassword',
+    'args': {
+      id,
+      oldPwd,
+      newPwd
+    }
+  }])
+}
+

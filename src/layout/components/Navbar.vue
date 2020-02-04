@@ -20,11 +20,14 @@
 
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
-          <auth-image
-            ref="avatar"
-            :image-arg="avatarArg"
-            class="user-avatar"
-          />
+          <el-avatar
+            :size="'medium'"
+          >
+            <auth-image
+              ref="avatar"
+              :image-arg="avatarArg"
+            />
+          </el-avatar>
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">
