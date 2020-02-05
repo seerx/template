@@ -102,7 +102,7 @@ export const constantRoutes = [
     children: [
       {
         path: 'index',
-        component: () => import('@/views/apidoc/index'),
+        component: () => import('@/views/pages/apidoc/index'),
         name: 'API',
         meta: { title: 'Api 文档', icon: 'api', noCache: true }
       }
@@ -143,7 +143,7 @@ export const constantRoutes = [
     children: [
       {
         path: 'index',
-        component: () => import('@/views/self-info/index'),
+        component: () => import('@/views/pages/self-info/index'),
         name: 'SelfInfo',
         meta: { title: '个人信息', icon: 'user', noCache: true }
       }

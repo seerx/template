@@ -1,5 +1,9 @@
 <template>
-  <img ref="image" :src="imageUrl">
+  <img
+    ref="image"
+    :src="imageUrl"
+    @click="evt"
+  >
 </template>
 
 <script>
@@ -26,6 +30,9 @@ export default {
     }
   },
   methods: {
+    evt(arg) {
+      console.log(arg)
+    },
     load() {
       const { service, arg } = this.imageArg
       image(service, arg).then(blob => {
