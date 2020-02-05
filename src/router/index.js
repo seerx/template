@@ -104,7 +104,7 @@ export const constantRoutes = [
         path: 'index',
         component: () => import('@/views/pages/apidoc/index'),
         name: 'API',
-        meta: { title: 'Api 文档', icon: 'api', noCache: true }
+        meta: { title: 'Api 文档', icon: 'api', noCache: false }
       }
     ]
   },
@@ -156,6 +156,24 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user roles
  */
 export const asyncRoutes = [
+  {
+    path: '/users',
+    component: Layout,
+    redirect: '/users/index',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/pages/users/index'),
+        name: 'API',
+        meta: {
+          title: '用户管理',
+          icon: 'peoples',
+          noCache: true,
+          roles: ['admin']
+        }
+      }
+    ]
+  },
   {
     path: '/permission',
     component: Layout,

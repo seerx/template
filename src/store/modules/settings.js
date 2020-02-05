@@ -8,7 +8,10 @@ const state = {
   showSettings: showSettings,
   tagsView: tagsView,
   fixedHeader: fixedHeader,
-  sidebarLogo: sidebarLogo
+  sidebarLogo: sidebarLogo,
+  // 监听屏幕尺寸
+  viewWidth: document.documentElement.clientWidth,
+  viewHeight: document.documentElement.clientHeight
 }
 
 const mutations = {
@@ -22,6 +25,18 @@ const mutations = {
 const actions = {
   changeSetting({ commit }, data) {
     commit('CHANGE_SETTING', data)
+  },
+  changeWidth({ commit }, width) {
+    commit('CHANGE_SETTING', {
+      key: 'viewWidth',
+      value: width
+    })
+  },
+  changeHeight({ commit }, height) {
+    commit('CHANGE_SETTING', {
+      key: 'viewHeight',
+      value: height
+    })
   }
 }
 

@@ -1,6 +1,23 @@
 import { getErrorTable, getToken, getTokenKey } from '@/utils/auth'
 
 const getters = {
+  contentHeight: state => {
+    const st = state.settings
+    let height = st.viewHeight
+    if (st.tagsView) {
+      // 减去 NavBar 和 TagsView 的高度
+      height -= 84
+    } else {
+      // 减去 NavBar 的高度
+      height -= 50
+    }
+    // 最小高度
+    if (height < 240) {
+      height = 240
+    }
+    // 要不到减去 padding
+    return height
+  },
   sidebar: state => state.app.sidebar,
   size: state => state.app.size,
   device: state => state.app.device,
