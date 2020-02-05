@@ -11,7 +11,6 @@
           <auth-image
             ref="avatar"
             :image-arg="avatarArg"
-            @click="alert(0)"
           />
         </el-avatar>
       </div>

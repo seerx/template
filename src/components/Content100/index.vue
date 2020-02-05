@@ -37,7 +37,15 @@ export default {
   .root-card {
     height: 100%;
     >.el-card__body {
+      height: 100%;
+      overflow: auto;
+    }
+  }
+  .root-card-h {
+    height: 100%;
+    >.el-card__body {
       height: ~"calc(100% - 55px)";
+      overflow: auto;
     }
   }
 }

@@ -54,3 +54,19 @@ export const modifyPassword = ({ id, oldPwd, newPwd }) => {
   }])
 }
 
+export const list = () => {
+  return http.post([{
+    'service': 'account.List'
+  }])
+}
+
+export const setStatus = ({ id, status }) => {
+  return http.post([{
+    'service': 'account.SetStatus',
+    'args': {
+      id,
+      status
+    }
+  }])
+}
+
