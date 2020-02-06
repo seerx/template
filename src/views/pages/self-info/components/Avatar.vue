@@ -33,12 +33,18 @@ export default {
     doUpload(upload) {
       const fileObject = upload.file
       uploadAvatar(fileObject).then(res => {
+        if (res['error']) {
+          this.$error(res['error'])
+          return
+        }
+        const avatar = res['data']['account.UploadAvatar'][0]['data']
+        this.$store.commit('user/SET_AVATAR', avatar)
         this.imageUrl = URL.createObjectURL(fileObject)
         this.$message({
           type: 'success',
           message: '头像上传成功'
         })
-        this.$emit('onAvatarUpdate', this.imageUrl)
+        // this.$emit('onAvatarUpdate', this.imageUrl)
       }).catch(err => {
         console.log(err)
       })

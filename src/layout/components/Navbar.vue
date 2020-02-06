@@ -75,6 +75,16 @@ export default {
     Search,
     AuthImage
   },
+  data() {
+    return {
+      avatarArg: {
+        service: 'account.Avatar',
+        arg: {
+          avatar: this.$store.getters.avatar
+        }
+      }
+    }
+  },
   computed: {
     ...mapGetters([
       'sidebar',
@@ -82,12 +92,15 @@ export default {
       'device'
     ])
   },
-  data() {
-    return {
-      avatarArg: {
-        service: 'account.Avatar'
+  watch: {
+    '$store.state.user.avatar': function() {
+      this.avatarArg.arg = {
+        avatar: this.$store.getters.avatar
       }
     }
+  },
+  mounted() {
+    // console.log('this.$store.getters.avatar', this.$store.getters.avatar)
   },
   methods: {
     toggleSideBar() {

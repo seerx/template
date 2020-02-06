@@ -8,7 +8,6 @@
         <el-col :span="18" :xs="24">
           <avatar
             v-if="page==='avatar'"
-            @onAvatarUpdate="updateAvatar"
           />
           <modify-info
             v-if="page==='info'"
@@ -49,9 +48,6 @@ export default {
     this.getUser()
   },
   methods: {
-    updateAvatar() {
-      this.$refs.info.updateAvatar()
-    },
     setPage(page) {
       this.page = page
     },

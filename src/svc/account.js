@@ -70,3 +70,22 @@ export const setStatus = ({ id, status }) => {
   }])
 }
 
+export const resetPassword = ({ id }) => {
+  return http.post([{
+    'service': 'account.ResetPassword',
+    'args': {
+      id
+    }
+  }])
+}
+
+export const createAccount = ({ id, name }) => {
+  return http.post([{
+    'service': 'account.CreateAccount',
+    'args': {
+      id,
+      name
+    }
+  }])
+}
+

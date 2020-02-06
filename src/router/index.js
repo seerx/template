@@ -164,7 +164,7 @@ export const asyncRoutes = [
       {
         path: 'index',
         component: () => import('@/views/pages/users/index'),
-        name: 'API',
+        name: 'Users',
         meta: {
           title: '用户管理',
           icon: 'peoples',

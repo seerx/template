@@ -3,6 +3,10 @@
     <el-card class="root-card-h">
       <div slot="header">
         <span>用户管理</span>
+        <create-account
+          style="float: right; margin-top: -4px;"
+          @onAccountCreate="handleCreated"
+        />
       </div>
       <el-table :data="users">
         <el-table-column
@@ -45,14 +49,10 @@
         </el-table-column>
         <el-table-column
           label="操作"
-          width="180"
+          width="100"
         >
           <template slot-scope="scope">
-            <el-button
-              size="mini"
-              type="danger"
-              @click="resetPassword(scope.row.id)"
-            >重置密码</el-button>
+            <reset-password :info="scope.row" />
           </template>
         </el-table-column>
       </el-table>
@@ -63,11 +63,13 @@
 <script>
 import Content100 from '@/components/Content100'
 import AuthImage from '@/components/AuthImage'
+import ResetPassword from './components/ResetPassword'
+import CreateAccount from './components/CreateAccount'
 import { list, setStatus } from '@/svc/account'
 
 export default {
   name: 'Users',
-  components: { Content100, AuthImage },
+  components: { Content100, AuthImage, ResetPassword, CreateAccount },
   data() {
     return {
       users: []
@@ -76,14 +78,13 @@ export default {
   mounted() {
     list().then(res => {
       this.users = res['data']
-      // console.log(res)
     }).catch(err => {
       console.log('err', err)
     })
   },
   methods: {
-    resetPassword(id) {
-      console.log(id)
+    handleCreated(info) {
+      this.users.splice(0, 0, info)
     },
     changeStatus(evt, id, index) {
       setStatus({

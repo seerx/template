@@ -2,7 +2,6 @@
   <img
     ref="image"
     :src="imageUrl"
-    @click="evt"
   >
 </template>
 
@@ -13,7 +12,8 @@ export default {
   name: 'AuthImage',
   props: {
     imageArg: {
-      type: Object
+      type: Object,
+      default: null
     }
   },
   data() {
@@ -27,18 +27,21 @@ export default {
     imageArg: {
       handler: 'load',
       immediate: true
+    },
+    'imageArg.arg': {
+      handler: 'load',
+      immediate: true
     }
   },
   methods: {
-    evt(arg) {
-      console.log(arg)
-    },
     load() {
       const { service, arg } = this.imageArg
+      // console.log('load image', this.imageArg)
       image(service, arg).then(blob => {
+        // console.log('blob', blob)
         this.imageUrl = URL.createObjectURL(blob)
       }).catch(err => {
-        console.log(err)
+        console.log('load image error', err)
       })
     }
   }

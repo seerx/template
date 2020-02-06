@@ -54,15 +54,21 @@ export default {
     }
   },
   data() {
+    // console.log('this.$router.getters.avatar', this.$router.getters.avatar)
     return {
       avatarArg: {
-        service: 'account.Avatar'
+        service: 'account.Avatar',
+        arg: {
+          avatar: this.$store.getters.avatar
+        }
       }
     }
   },
-  methods: {
-    updateAvatar() {
-      this.$refs.avatar.load()
+  watch: {
+    '$store.state.user.avatar': function() {
+      this.avatarArg.arg = {
+        avatar: this.$store.getters.avatar
+      }
     }
   }
 }
