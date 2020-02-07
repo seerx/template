@@ -122,12 +122,7 @@ export default {
   },
   methods: {
     handleCreated(info) {
-      // const users = [info]
-      // users.push(...this.users)
-      // console.log(users)
-      // this.users = []
       this.users.push(info)
-      // = users
       // this.users.splice(0, 0, info)
     },
     statusChanged(id, index, newStatus) {
