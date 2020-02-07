@@ -37,13 +37,9 @@
           width="180"
         >
           <template slot-scope="scope">
-            <el-switch
-              :value="scope.row.status"
-              :active-value="1"
-              :inactive-value="2"
-              active-text="正常"
-              inactive-text="禁用"
-              @change="changeStatus($event, scope.row.id, scope.$index)"
+            <set-status
+              :scope="scope"
+              @statusChanged="statusChanged"
             />
           </template>
         </el-table-column>
@@ -65,11 +61,12 @@ import Content100 from '@/components/Content100'
 import AuthImage from '@/components/AuthImage'
 import ResetPassword from './components/ResetPassword'
 import CreateAccount from './components/CreateAccount'
-import { list, setStatus } from '@/svc/account'
+import SetStatus from './components/SetStatus'
+import { list } from '@/svc/account'
 
 export default {
   name: 'Users',
-  components: { Content100, AuthImage, ResetPassword, CreateAccount },
+  components: { Content100, AuthImage, ResetPassword, CreateAccount, SetStatus },
   data() {
     return {
       users: []
@@ -77,24 +74,22 @@ export default {
   },
   mounted() {
     list().then(res => {
+      if (res['error']) {
+        this.$error(res['error'])
+        return
+      }
       this.users = res['data']
     }).catch(err => {
-      console.log('err', err)
+      // console.log('err', err)
+      this.$error(err)
     })
   },
   methods: {
     handleCreated(info) {
       this.users.splice(0, 0, info)
     },
-    changeStatus(evt, id, index) {
-      setStatus({
-        id: id,
-        status: evt
-      }).then((res) => {
-        if (!res['error']) {
-          this.users[index].status = evt
-        }
-      })
+    statusChanged(id, index, newStatus) {
+      this.users[index].status = newStatus
     }
   }
 }
