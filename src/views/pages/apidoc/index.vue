@@ -1,32 +1,36 @@
 <template>
-  <div class="app-container frame" :style="{ height: frameHeight + 'px' }">
-    <iframe class="window" :src="api" />
-  </div>
+  <iframe :style="frame" :src="api" />
 </template>
 
 <script>
-// import Driver from 'driver.js' // import driver.js
-// import 'driver.js/dist/driver.min.css' // import driver.js css
 
 export default {
   name: 'Api',
   data() {
     return {
       api: '',
-      frameHeight: 100
+      frameHeight: 100,
+      frame: {
+        height: '100px',
+        padding: '0',
+        width: '100%'
+      }
+    }
+  },
+  watch: {
+    '$store.state.settings.viewHeight': function() {
+      this.calcHeight()
     }
   },
   mounted() {
-    // this.driver = new Driver()
+    this.calcHeight()
     this.$nextTick(() => {
-      // this.$refs.frame
       this.api = '/api?tokenfield=' + this.$store.getters.key + '&tokenvalue=' + this.$store.getters.token
     })
-
-    this.frameHeight = document.documentElement.clientHeight - 88
-    window.onresize = function() {
-      this.frameHeight = document.documentElement.clientHeight - 88
-      // console.log(this.frameHeight)
+  },
+  methods: {
+    calcHeight() {
+      this.frame.height = this.$store.getters.contentHeight + 'px'
     }
   }
 }
