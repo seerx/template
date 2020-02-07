@@ -89,3 +89,21 @@ export const createAccount = ({ id, name }) => {
   }])
 }
 
+export const listAccountsAndRoles = () => {
+  return http.post([{
+    'service': 'account.List'
+  }, {
+    'service': 'role.List'
+  }])
+}
+
+export const setRoles = (id, roles) => {
+  return http.post([{
+    'service': 'account.SetRoles',
+    'args': {
+      'id': id,
+      'roles': roles
+    }
+  }])
+}
+

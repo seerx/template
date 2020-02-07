@@ -8,7 +8,9 @@
           @onAccountCreate="handleCreated"
         />
       </div>
-      <el-table :data="users">
+      <el-table
+        :data="users"
+      >
         <el-table-column
           fixed
           label="账号"
@@ -29,9 +31,17 @@
           width="180"
         />
         <el-table-column
-          prop="roles"
           label="角色"
-        />
+        >
+          <template slot-scope="scope">
+            <set-roles
+              :scope="scope"
+              :role-map="roleMap"
+              :role-list="roles"
+              @setRoles="setRoles"
+            />
+          </template>
+        </el-table-column>
         <el-table-column
           label="状态"
           width="180"
@@ -62,34 +72,81 @@ import AuthImage from '@/components/AuthImage'
 import ResetPassword from './components/ResetPassword'
 import CreateAccount from './components/CreateAccount'
 import SetStatus from './components/SetStatus'
-import { list } from '@/svc/account'
+import SetRoles from './components/SetRoles'
+import { listAccountsAndRoles } from '@/svc/account'
 
 export default {
   name: 'Users',
-  components: { Content100, AuthImage, ResetPassword, CreateAccount, SetStatus },
+  components: { Content100, AuthImage, ResetPassword, CreateAccount, SetStatus, SetRoles },
   data() {
     return {
-      users: []
+      users: [],
+      roles: [],
+      roleMap: {}
     }
   },
   mounted() {
-    list().then(res => {
+    listAccountsAndRoles().then(res => {
       if (res['error']) {
         this.$error(res['error'])
         return
       }
-      this.users = res['data']
-    }).catch(err => {
-      // console.log('err', err)
-      this.$error(err)
+      const acts = res['account.List'][0]
+      if (acts['error']) {
+        this.$error(acts['error'])
+        return
+      }
+      this.users = acts['data']
+
+      const roles = res['role.List'][0]
+      if (roles['error']) {
+        this.$error(roles['error'])
+        return
+      }
+      this.roles = roles['data']
+      this.roleMap = {}
+      this.roles.forEach((item, n) => {
+        this.roleMap[item['id']] = item['name']
+      })
     })
+    // list().then(res => {
+    //   if (res['error']) {
+    //     this.$error(res['error'])
+    //     return
+    //   }
+    //   this.users = res['data']
+    // }).catch(err => {
+    //   // console.log('err', err)
+    //   this.$error(err)
+    // })
   },
   methods: {
     handleCreated(info) {
-      this.users.splice(0, 0, info)
+      // const users = [info]
+      // users.push(...this.users)
+      // console.log(users)
+      // this.users = []
+      this.users.push(info)
+      // = users
+      // this.users.splice(0, 0, info)
     },
     statusChanged(id, index, newStatus) {
-      this.users[index].status = newStatus
+      this.users.forEach(user => {
+        if (user.id === id) {
+          user.status = newStatus
+          return
+        }
+      })
+      // this.users[index].status = newStatus
+    },
+    setRoles(id, index, roles) {
+      // this.users[index].roles = roles
+      this.users.forEach(user => {
+        if (user.id === id) {
+          user.roles = roles
+          return
+        }
+      })
     }
   }
 }

@@ -23,8 +23,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dlg=false">取 消</el-button>
-        <el-button type="primary" @click="handleCreate">添 加</el-button>
+        <el-button v-if="!saving" @click="dlg=false">取 消</el-button>
+        <el-button type="primary" :loading="saving" @click="handleCreate">添 加</el-button>
       </div>
     </el-dialog>
   </div>
@@ -38,6 +38,7 @@ export default {
   data() {
     return {
       dlg: false,
+      saving: false,
       form: {
         id: '',
         name: ''
@@ -46,15 +47,20 @@ export default {
   },
   methods: {
     handleCreate() {
+      this.saving = true
       createAccount({
         id: this.form.id,
         name: this.form.name
       }).then(res => {
+        this.saving = false
         if (res['error']) {
           this.$error(res['error'])
         } else {
           this.$emit('onAccountCreate', res['data'])
+          this.dlg = false
         }
+      }).catch(() => {
+        this.saving = false
       })
     }
   }
